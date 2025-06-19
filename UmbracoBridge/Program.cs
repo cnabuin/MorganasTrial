@@ -1,3 +1,4 @@
+using Scalar.AspNetCore;
 using System.Net.Http.Headers;
 using UmbracoBridge.Services;
 
@@ -18,6 +19,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();

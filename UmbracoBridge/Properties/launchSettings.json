@@ -9,6 +9,7 @@
       "applicationUrl": "http://localhost:5285"
     },
     "https": {
+      "launchBrowser": true,
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -30,7 +31,7 @@
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:59372/",
-      "sslPort": 44350
+      "sslPort": 44338
     }
   }
 }
