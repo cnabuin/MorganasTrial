@@ -9,7 +9,7 @@ namespace UmbracoBridge.Services;
 
 public class UmbracoManagementService : IUmbracoManagementService
 {
-    private const string umbracoManagementUrl = "https://localhost:44353/umbraco/management/api/v1";
+    private const string umbracoManagementUrl = "https://localhost:44313/umbraco/management/api/v1";
 
     private readonly IHttpClientFactory _httpClientFactory;
     public UmbracoManagementService(IHttpClientFactory httpClientFactory)
