@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UmbracoBridge.Services;
 
 namespace UmbracoBridge.Controllers;
 [Route("[controller]")]
@@ -14,15 +15,30 @@ public class DocumentTypeController : ControllerBase
 
     // POST /DocumentType
     [HttpPost]
-    public async Task<IResult> Post([FromBody] CreateDocumentTypeRequestModel value)
+    public async Task<ObjectResult> Post([FromBody] CreateDocumentTypeRequestModel value)
     {
-        return await _umbracoService.Create(value);
+        try
+        {
+            return Ok(await _umbracoService.Create(value));
+        }
+        catch (ApiException ex)
+        {
+            return StatusCode(ex.StatusCode, ex.ProblemDetails);
+        }
     }
 
-    // DELETE /DocumentType/5
+    // DELETE /DocumentType/{id}
     [HttpDelete("{id}")]
-    public async Task<IResult> Delete(string id)
+    public async Task<ActionResult> Delete(string id)
     {
-        return await _umbracoService.Delete(id);
+        try
+        {
+            await _umbracoService.Delete(id);
+            return Ok();
+        }
+        catch (ApiException ex)
+        {
+            return StatusCode(ex.StatusCode, ex.ProblemDetails);
+        }
     }
 }

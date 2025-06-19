@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UmbracoBridge.Services;
 
 namespace UmbracoBridge.Controllers;
 
@@ -14,8 +15,16 @@ public class HealthcheckController : ControllerBase
 
     // GET: /HealthCheck
     [HttpGet]
-    public async Task<IResult> Get()
+    public async Task<ObjectResult> Get()
     {
-        return await _umbracoService.GetHealthChecks();
+        try
+        {
+            object? response = await _umbracoService.GetHealthChecks();
+            return Ok(response);
+        }
+        catch (ApiException ex)
+        {
+            return StatusCode(ex.StatusCode, ex.ProblemDetails);
+        }
     }
 }

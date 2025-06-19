@@ -1,5 +1,5 @@
 using System.Net.Http.Headers;
-using UmbracoBridge.Controllers;
+using UmbracoBridge.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
