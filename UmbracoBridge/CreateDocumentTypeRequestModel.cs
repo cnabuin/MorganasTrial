@@ -1,11 +1,23 @@
-﻿namespace UmbracoBridge;
+﻿using System.ComponentModel.DataAnnotations;
+using UmbracoBridge.Validators;
+
+namespace UmbracoBridge;
 
 public class CreateDocumentTypeRequestModel
 {
-    public string Alias { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string Icon { get; set; }
+    [Required]
+    public string Alias { get; set; } = string.Empty;
+
+    [Required]
+    public string Name { get; set; } = string.Empty;
+
+    [Required]
+    public string Description { get; set; } = string.Empty;
+
+    [Required]
+    [StartsWith("icon-")]
+    public string Icon { get; set; } = string.Empty;
+
     public bool AllowedAsRoot { get; set; }
     public bool VariesByCulture { get; set; }
     public bool VariesBySegment { get; set; }

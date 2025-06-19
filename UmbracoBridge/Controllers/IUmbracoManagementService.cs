@@ -1,4 +1,4 @@
-﻿namespace UmbracoBridge;
+﻿namespace UmbracoBridge.Controllers;
 
 public interface IUmbracoManagementService
 {

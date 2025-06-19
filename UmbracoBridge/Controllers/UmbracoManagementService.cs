@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace UmbracoBridge;
+namespace UmbracoBridge.Controllers;
 
 public class UmbracoManagementService : IUmbracoManagementService
 {
