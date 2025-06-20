@@ -1,18 +1,29 @@
 using Scalar.AspNetCore;
 using UmbracoBridge.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-builder.Services.AddHttpClient();
+// Turn on service discovery to resolve umbracocsm address via Aspire.Net orchestration.
+builder.Services.AddServiceDiscovery();
+builder.Services.ConfigureHttpClientDefaults(http =>
+{
+    http.AddServiceDiscovery();
+});
+
+builder.Services.AddHttpClient<UmbracoManagementService>(client =>
+{
+    client.BaseAddress = new Uri("https://umbracocms");
+});
 
 builder.Services.AddScoped<IHealthCheckService, HealthcheckService>();
 builder.Services.AddScoped<IDocumentTypeService, DocumentTypeService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

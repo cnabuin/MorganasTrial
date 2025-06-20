@@ -1,6 +1,12 @@
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.UmbracoCMS>("umbracocms");
-builder.AddProject<Projects.UmbracoBridge>("umbracobridge");
+
+IResourceBuilder<ProjectResource> cms = builder.AddProject<Projects.UmbracoCMS>("umbracocms")
+    .WithHttpEndpoint()
+    .WithHttpsEndpoint();
+
+IResourceBuilder<ProjectResource> bridge = builder.AddProject<Projects.UmbracoBridge>("umbracobridge")
+    .WithReference(cms)
+    .WaitFor(cms);
 
 builder.Build().Run();
