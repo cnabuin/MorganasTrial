@@ -1,17 +1,16 @@
 using Scalar.AspNetCore;
-using System.Net.Http.Headers;
 using UmbracoBridge.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-
 builder.Services.AddOpenApi();
 
 builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<IUmbracoManagementService, UmbracoManagementService>();
+builder.Services.AddScoped<IHealthCheckService, HealthcheckService>();
+builder.Services.AddScoped<IDocumentTypeService, DocumentTypeService>();
 
 var app = builder.Build();
 

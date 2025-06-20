@@ -6,11 +6,11 @@ namespace UmbracoBridge.Controllers;
 [ApiController]
 public class DocumentTypeController : ControllerBase
 {
-    private readonly IUmbracoManagementService _umbracoService;
+    private readonly IDocumentTypeService _documentTypeService;
 
-    public DocumentTypeController(IUmbracoManagementService umbracoService)
+    public DocumentTypeController(IDocumentTypeService documentTypeService)
     {
-        _umbracoService = umbracoService;
+        _documentTypeService = documentTypeService;
     }
 
     // POST /DocumentType
@@ -19,7 +19,7 @@ public class DocumentTypeController : ControllerBase
     {
         try
         {
-            return Ok(await _umbracoService.Create(value));
+            return Ok(await _documentTypeService.Create(value));
         }
         catch (ApiException ex)
         {
@@ -33,7 +33,7 @@ public class DocumentTypeController : ControllerBase
     {
         try
         {
-            await _umbracoService.Delete(id);
+            await _documentTypeService.Delete(id);
             return Ok();
         }
         catch (ApiException ex)

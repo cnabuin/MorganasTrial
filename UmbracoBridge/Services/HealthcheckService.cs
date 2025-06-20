@@ -1,17 +1,18 @@
 ﻿using Duende.IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
 namespace UmbracoBridge.Services;
 
-public class UmbracoManagementService : IUmbracoManagementService
+public class HealthcheckService : IHealthCheckService
 {
     private const string umbracoManagementUrl = "https://localhost:5001/umbraco/management/api/v1";
 
     private readonly IHttpClientFactory _httpClientFactory;
-    public UmbracoManagementService(IHttpClientFactory httpClientFactory)
+    public HealthcheckService(IHttpClientFactory httpClientFactory)
     {
 
         _httpClientFactory = httpClientFactory;
@@ -43,6 +44,41 @@ public class UmbracoManagementService : IUmbracoManagementService
         }
     }
 
+ 
+
+    private async Task<string> GetAuthToken()
+    {
+        HttpClient client = _httpClientFactory.CreateClient();
+
+        TokenResponse tokenResponse = await client.RequestClientCredentialsTokenAsync(
+            new ClientCredentialsTokenRequest
+            {
+                Address = $"{umbracoManagementUrl}/security/back-office/token",
+                ClientId = "umbraco-back-office-admin",
+                ClientSecret = "admin12345"
+            }
+        );
+
+        if (tokenResponse.IsError || tokenResponse.AccessToken is null)
+        {
+            return string.Empty;
+        }
+
+        return tokenResponse.AccessToken;
+    }
+}
+
+public class DocumentTypeService: IDocumentTypeService
+{
+    private const string umbracoManagementUrl = "https://localhost:5001/umbraco/management/api/v1";
+
+    private readonly IHttpClientFactory _httpClientFactory;
+    public DocumentTypeService(IHttpClientFactory httpClientFactory)
+    {
+
+        _httpClientFactory = httpClientFactory;
+    }
+
     public async Task<string?> Create(CreateDocumentTypeRequestModel value)
     {
         HttpClient client = _httpClientFactory.CreateClient();
@@ -64,8 +100,8 @@ public class UmbracoManagementService : IUmbracoManagementService
         }
         else
         {
-            ProblemDetails? problemDetails = string.IsNullOrWhiteSpace(responseContent) 
-                ? null 
+            ProblemDetails? problemDetails = string.IsNullOrWhiteSpace(responseContent)
+                ? null
                 : JsonSerializer.Deserialize<ProblemDetails>(responseContent);
 
             throw new ApiException((int)response.StatusCode, problemDetails);
@@ -93,6 +129,8 @@ public class UmbracoManagementService : IUmbracoManagementService
         }
     }
 
+
+
     private async Task<string> GetAuthToken()
     {
         HttpClient client = _httpClientFactory.CreateClient();
@@ -113,4 +151,10 @@ public class UmbracoManagementService : IUmbracoManagementService
 
         return tokenResponse.AccessToken;
     }
+}
+
+public interface IDocumentTypeService
+{
+    Task<string?> Create(CreateDocumentTypeRequestModel value);
+    Task Delete(string id);
 }

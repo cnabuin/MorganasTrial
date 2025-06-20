@@ -7,8 +7,8 @@ namespace UmbracoBridge.Controllers;
 [ApiController]
 public class HealthcheckController : ControllerBase
 {
-    private readonly IUmbracoManagementService _umbracoService;
-    public HealthcheckController(IUmbracoManagementService umbracoService)
+    private readonly IHealthCheckService _umbracoService;
+    public HealthcheckController(IHealthCheckService umbracoService)
     {
         _umbracoService =  umbracoService;
     }
