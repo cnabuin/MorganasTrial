@@ -14,14 +14,22 @@ builder.Services.ConfigureHttpClientDefaults(http =>
     http.AddServiceDiscovery();
 });
 
-builder.Services.AddHttpClient<UmbracoManagementService>(client =>
+var baseAddress = Environment.GetEnvironmentVariable("API_BASE_ADDRESS");
+
+builder.Services.AddHttpClient<IAuthService, AuthService>(client =>
 {
-    client.BaseAddress = new Uri("https://umbracocms");
+    client.BaseAddress = new Uri(baseAddress);
 });
 
-builder.Services.AddScoped<IHealthCheckService, HealthcheckService>();
-builder.Services.AddScoped<IDocumentTypeService, DocumentTypeService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpClient<IHealthCheckService, HealthcheckService>(client =>
+{
+    client.BaseAddress = new Uri(baseAddress);
+});
+
+builder.Services.AddHttpClient<IDocumentTypeService, DocumentTypeService>(client =>
+{
+    client.BaseAddress = new Uri(baseAddress);
+});
 
 WebApplication app = builder.Build();
 

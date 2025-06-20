@@ -5,13 +5,15 @@ using System.Text.Json;
 
 namespace UmbracoBridge.Services;
 
-public class DocumentTypeService : UmbracoManagementService, IDocumentTypeService
+public class DocumentTypeService : IDocumentTypeService
 {
+    private readonly HttpClient _client;
     private readonly IAuthService _authService;
 
-    public DocumentTypeService(IHttpClientFactory httpClientFactory, IAuthService authService) : base(httpClientFactory)
+    public DocumentTypeService(HttpClient client, IAuthService authService)
     {
-        this._authService = authService;
+        _client = client;
+        _authService = authService;
     }
 
     public async Task<string?> Create(CreateDocumentTypeRequestModel value)

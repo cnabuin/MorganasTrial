@@ -4,11 +4,14 @@ using System.Text.Json;
 
 namespace UmbracoBridge.Services;
 
-public class HealthcheckService : UmbracoManagementService, IHealthCheckService
+public class HealthcheckService : IHealthCheckService
 {
+    private readonly HttpClient _client;
     private readonly IAuthService _authService;
-    public HealthcheckService(IHttpClientFactory httpClient, IAuthService authService) : base(httpClient)
+
+    public HealthcheckService(HttpClient client, IAuthService authService)
     {
+        _client = client;
         _authService = authService;
     }
 

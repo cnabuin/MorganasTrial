@@ -2,10 +2,14 @@
 
 namespace UmbracoBridge.Services;
 
-public class AuthService : UmbracoManagementService, IAuthService
+public class AuthService : IAuthService
 {
-    public AuthService(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    private const string securityEndpoint = "umbraco/management/api/v1/security";
+    private readonly HttpClient _client;
+
+    public AuthService(HttpClient httpClient)
     {
+        _client = httpClient;
     }
 
     public async Task<string> GetAuthToken()
@@ -13,7 +17,7 @@ public class AuthService : UmbracoManagementService, IAuthService
         TokenResponse tokenResponse = await _client.RequestClientCredentialsTokenAsync(
             new ClientCredentialsTokenRequest
             {
-                Address = $"{_client.BaseAddress}umbraco/management/api/v1/security/back-office/token",
+                Address = $"{_client.BaseAddress}{securityEndpoint}/back-office/token",
                 ClientId = "umbraco-back-office-admin",
                 ClientSecret = "admin12345"
             }
