@@ -1,5 +1,3 @@
-using Aspire.Hosting;
-
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
 string umbracoName = "umbracocms";
