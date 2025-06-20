@@ -1,0 +1,66 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = null;
+	var selection = Umbraco.ContentAtRoot().FirstOrDefault()
+    .Children()
+    .Where(x => x.IsVisible());
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>        
+      body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+        }
+        .nav-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            width: 100%;
+        }
+
+        .nav-item {
+            flex: 1;
+            height: 100vh;
+            display: flex;
+        }
+
+        .nav-link {
+            color: #333;            
+            background-color: #f0f0f0;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+        }
+
+        /* Optional: different colors for each half */
+        .nav-item:first-child .nav-link {
+            background-color: #e8e8e8;
+        }
+
+        .nav-item:last-child .nav-link {
+            background-color: #4E87B7;
+        }
+    </style>
+</head>
+<body>
+    <ul class="nav-list">
+        @foreach (var item in selection)
+        {
+            <li class="nav-item">
+                <a href="@item.Url()" 
+                   class="nav-link @(Model.Id == item.Id)">
+                    @item.Name()
+                </a>
+            </li>
+        }
+    </ul>
+</body>
+</html>

@@ -18,14 +18,14 @@ using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Web.Common.PublishedModels
 {
-	/// <summary>asd4</summary>
-	[PublishedModel("asd5")]
-	public partial class Asd5 : PublishedElementModel
+	/// <summary>HomePage</summary>
+	[PublishedModel("homePage")]
+	public partial class HomePage : PublishedContentModel
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
-		public new const string ModelTypeAlias = "asd5";
+		public new const string ModelTypeAlias = "homePage";
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
 		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
@@ -34,14 +34,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 			=> PublishedModelUtility.GetModelContentType(contentTypeCache, ModelItemType, ModelTypeAlias);
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
 		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<Asd5, TValue>> selector)
+		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<HomePage, TValue>> selector)
 			=> PublishedModelUtility.GetModelPropertyType(GetModelContentType(contentTypeCache), selector);
 #pragma warning restore 0109
 
 		private IPublishedValueFallback _publishedValueFallback;
 
 		// ctor
-		public Asd5(IPublishedElement content, IPublishedValueFallback publishedValueFallback)
+		public HomePage(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
 			: base(content, publishedValueFallback)
 		{
 			_publishedValueFallback = publishedValueFallback;

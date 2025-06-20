@@ -21,7 +21,7 @@ builder.Services.AddHttpClient<IAuthService, AuthService>(client =>
     client.BaseAddress = new Uri(baseAddress);
 });
 
-builder.Services.AddHttpClient<IHealthCheckService, HealthcheckService>(client =>
+builder.Services.AddHttpClient<IUmbracoService, HealthcheckService>(client =>
 {
     client.BaseAddress = new Uri(baseAddress);
 });
@@ -37,7 +37,7 @@ WebApplication app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(string.Empty);
 }
 
 app.UseHttpsRedirection();

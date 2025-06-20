@@ -5,21 +5,21 @@ namespace UmbracoBridge.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class HealthcheckController : ControllerBase
+public class ContentController : ControllerBase
 {
     private readonly IUmbracoService _umbracoService;
-    public HealthcheckController(IUmbracoService umbracoService)
+    public ContentController(IUmbracoService umbracoService)
     {
-        _umbracoService = umbracoService;
+        _umbracoService =  umbracoService;
     }
 
     // GET: /HealthCheck
     [HttpGet]
-    public async Task<ObjectResult> Get()
+    public async Task<ObjectResult> GetContent()
     {
         try
         {
-            object? response = await _umbracoService.GetHealthChecks();
+            object? response = await _umbracoService.GetContent();
             return Ok(response);
         }
         catch (ApiException ex)
@@ -28,12 +28,12 @@ public class HealthcheckController : ControllerBase
         }
     }
 
-    [HttpGet("{isOk}")]
-    public async Task<ActionResult> IsOk(bool isOk)
+    [HttpGet("{id}")]
+    public async Task<ObjectResult> GetContentById(string id)
     {
         try
         {
-            object? response = await _umbracoService.IsOk(isOk);
+            object? response = await _umbracoService.GetContent(id);
             return Ok(response);
         }
         catch (ApiException ex)

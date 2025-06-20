@@ -18,14 +18,14 @@ using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Web.Common.PublishedModels
 {
-	/// <summary>This is the Name</summary>
-	[PublishedModel("ThisIsAnAlias")]
-	public partial class ThisIsAnAlias : PublishedElementModel
+	/// <summary>Page</summary>
+	[PublishedModel("page")]
+	public partial class Page : PublishedContentModel
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
-		public new const string ModelTypeAlias = "ThisIsAnAlias";
+		public new const string ModelTypeAlias = "page";
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
 		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
@@ -34,19 +34,27 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 			=> PublishedModelUtility.GetModelContentType(contentTypeCache, ModelItemType, ModelTypeAlias);
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
 		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<ThisIsAnAlias, TValue>> selector)
+		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<Page, TValue>> selector)
 			=> PublishedModelUtility.GetModelPropertyType(GetModelContentType(contentTypeCache), selector);
 #pragma warning restore 0109
 
 		private IPublishedValueFallback _publishedValueFallback;
 
 		// ctor
-		public ThisIsAnAlias(IPublishedElement content, IPublishedValueFallback publishedValueFallback)
+		public Page(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
 			: base(content, publishedValueFallback)
 		{
 			_publishedValueFallback = publishedValueFallback;
 		}
 
 		// properties
+
+		///<summary>
+		/// backgroundimage
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.3+9b2fd12")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("backgroundimage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops Backgroundimage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "backgroundimage");
 	}
 }

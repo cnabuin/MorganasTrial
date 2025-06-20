@@ -11,6 +11,16 @@ public class MorganaController : ManagementApiControllerBase
     [HttpGet]
     public IActionResult CheckIsOk([FromQuery] bool isOk)
     {
-        return isOk ? Ok("It's OK") : BadRequest("It is not OK");
+        if (isOk)
+        {
+            return Ok("It's OK");
+        }
+        else
+        {
+            return BadRequest(new ProblemDetails()
+            {
+                Title = "It is not OK"
+            });
+        }
     }
 }
