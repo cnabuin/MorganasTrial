@@ -1,5 +1,4 @@
 ﻿using Duende.IdentityModel.Client;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Text;
@@ -9,7 +8,7 @@ namespace UmbracoBridge.Services;
 
 public class UmbracoManagementService : IUmbracoManagementService
 {
-    private const string umbracoManagementUrl = "https://localhost:44313/umbraco/management/api/v1";
+    private const string umbracoManagementUrl = "https://localhost:5001/umbraco/management/api/v1";
 
     private readonly IHttpClientFactory _httpClientFactory;
     public UmbracoManagementService(IHttpClientFactory httpClientFactory)

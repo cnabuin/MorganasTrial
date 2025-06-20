@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace UmbracoBridge.Services;
+﻿namespace UmbracoBridge.Services;
 
 public interface IUmbracoManagementService
 {
