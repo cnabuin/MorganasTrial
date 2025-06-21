@@ -36,6 +36,11 @@ MorganasTrial is a .NET 9 solution that exposes a RESTful Web API for managing U
 - **Umbraco CMS**: `https://localhost:5001/`
 - **Umbraco Swagger UI**: `https://localhost:5001/umbraco/swagger/index.html?urls.primaryName=Umbraco+Management+API`
 
+## Umbraco Backoffice Credentials
+
+- **Email**: `admin@test.com`
+- **Password**: `admin12345`
+
 ## Web API Endpoints & Examples
 
 ### 1. Health Check
