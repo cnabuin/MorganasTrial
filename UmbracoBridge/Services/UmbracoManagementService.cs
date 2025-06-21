@@ -1,32 +1,28 @@
-﻿using Duende.IdentityModel.Client;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 
 namespace UmbracoBridge.Services;
 
 public class UmbracoManagementService : IUmbracoManagementService
 {
-    private const string umbracoManagementUrl = "https://localhost:44313/umbraco/management/api/v1";
+    private readonly HttpClient _client;
+    private readonly IAuthService _authService;
 
-    private readonly IHttpClientFactory _httpClientFactory;
-    public UmbracoManagementService(IHttpClientFactory httpClientFactory)
+    public UmbracoManagementService(HttpClient client, IAuthService authService)
     {
-
-        _httpClientFactory = httpClientFactory;
+        _client = client;
+        _authService = authService;
     }
 
-    public async Task<object?> GetHealthChecks()
+    public async Task<object?> GetContent()
     {
-        HttpClient client = _httpClientFactory.CreateClient();
-        string url = $"{umbracoManagementUrl}/health-check-group";
+        string url = $"{_client.BaseAddress}umbraco/delivery/api/v2/content";
 
-        string token = await GetAuthToken();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var apiKey = Environment.GetEnvironmentVariable("UMBRACO_DELIVERY_API_KEY");
+        _client.DefaultRequestHeaders.Add("api-key", apiKey);
 
-        HttpResponseMessage response = await client.GetAsync(url);
+        HttpResponseMessage response = await _client.GetAsync(url);
 
         string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -44,74 +40,78 @@ public class UmbracoManagementService : IUmbracoManagementService
         }
     }
 
-    public async Task<string?> Create(CreateDocumentTypeRequestModel value)
+    public async Task<object?> GetContent(string id)
     {
-        HttpClient client = _httpClientFactory.CreateClient();
-        string url = $"{umbracoManagementUrl}/document-type";
+        string url = $"{_client.BaseAddress}umbraco/delivery/api/v2/content/item/{id}";
 
-        string token = await GetAuthToken();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var apiKey = Environment.GetEnvironmentVariable("UMBRACO_DELIVERY_API_KEY");
+        _client.DefaultRequestHeaders.Add("api-key", apiKey);
 
-        StringContent content = new(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _client.GetAsync(url);
 
-        HttpResponseMessage response = await client.PostAsync(url, content);
         string responseContent = await response.Content.ReadAsStringAsync();
 
-        if (response.StatusCode == System.Net.HttpStatusCode.Created)
+        if (response.IsSuccessStatusCode)
         {
-            response.Headers.TryGetValues("Umb-Generated-Resource", out var generatedResource);
-
-            return generatedResource?.FirstOrDefault();
+            return JsonSerializer.Deserialize<object>(responseContent);
         }
         else
         {
-            ProblemDetails? problemDetails = string.IsNullOrWhiteSpace(responseContent) 
-                ? null 
-                : JsonSerializer.Deserialize<ProblemDetails>(responseContent);
+            ProblemDetails? problemDetails = string.IsNullOrWhiteSpace(responseContent)
+                            ? null
+                            : JsonSerializer.Deserialize<ProblemDetails>(responseContent);
 
             throw new ApiException((int)response.StatusCode, problemDetails);
         }
     }
 
-    public async Task Delete(string id)
+    public async Task<object?> GetHealthChecks()
     {
-        HttpClient client = _httpClientFactory.CreateClient();
-        string url = $"{umbracoManagementUrl}/document-type/{id}";
+        string url = $"{_client.BaseAddress}umbraco/management/api/v1/health-check-group";
 
-        string token = await GetAuthToken();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        string token = await _authService.GetAuthToken();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        HttpResponseMessage response = await client.DeleteAsync(url);
+        HttpResponseMessage response = await _client.GetAsync(url);
+
         string responseContent = await response.Content.ReadAsStringAsync();
 
-        if (!response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
+        {
+            return JsonSerializer.Deserialize<object>(responseContent);
+        }
+        else
         {
             ProblemDetails? problemDetails = string.IsNullOrWhiteSpace(responseContent)
-                ? null
-                : JsonSerializer.Deserialize<ProblemDetails>(responseContent);
+                            ? null
+                            : JsonSerializer.Deserialize<ProblemDetails>(responseContent);
 
             throw new ApiException((int)response.StatusCode, problemDetails);
         }
     }
 
-    private async Task<string> GetAuthToken()
+    public async Task<object?> IsOk(bool isOk)
     {
-        HttpClient client = _httpClientFactory.CreateClient();
+        string url = $"{_client.BaseAddress}umbraco/management/api/v1/is-ok?isOk={isOk}";
 
-        TokenResponse tokenResponse = await client.RequestClientCredentialsTokenAsync(
-            new ClientCredentialsTokenRequest
-            {
-                Address = $"{umbracoManagementUrl}/security/back-office/token",
-                ClientId = "umbraco-back-office-admin",
-                ClientSecret = "admin12345"
-            }
-        );
+        string token = await _authService.GetAuthToken();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        if (tokenResponse.IsError || tokenResponse.AccessToken is null)
+        HttpResponseMessage response = await _client.GetAsync(url);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
         {
-            return string.Empty;
+            return JsonSerializer.Deserialize<object>(responseContent);
         }
+        else
+        {
+            ProblemDetails? problemDetails = string.IsNullOrWhiteSpace(responseContent)
+                            ? null
+                            : JsonSerializer.Deserialize<ProblemDetails>(responseContent);
 
-        return tokenResponse.AccessToken;
+            throw new ApiException((int)response.StatusCode, problemDetails);
+        }
     }
 }

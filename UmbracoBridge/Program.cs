@@ -1,23 +1,43 @@
-using System.Net.Http.Headers;
+using Scalar.AspNetCore;
 using UmbracoBridge.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-
 builder.Services.AddOpenApi();
 
-builder.Services.AddHttpClient();
+// Turn on service discovery to resolve umbracocsm address via Aspire.Net orchestration.
+builder.Services.AddServiceDiscovery();
+builder.Services.ConfigureHttpClientDefaults(http =>
+{
+    http.AddServiceDiscovery();
+});
 
-builder.Services.AddScoped<IUmbracoManagementService, UmbracoManagementService>();
+var baseAddress = Environment.GetEnvironmentVariable("UMBRACO_BASE_ADDRESS");
 
-var app = builder.Build();
+builder.Services.AddHttpClient<IAuthService, AuthService>(client =>
+{
+    client.BaseAddress = new Uri(baseAddress);
+});
+
+builder.Services.AddHttpClient<IUmbracoManagementService, UmbracoManagementService>(client =>
+{
+    client.BaseAddress = new Uri(baseAddress);
+});
+
+builder.Services.AddHttpClient<IDocumentTypeService, DocumentTypeService>(client =>
+{
+    client.BaseAddress = new Uri(baseAddress);
+});
+
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(string.Empty);
 }
 
 app.UseHttpsRedirection();

@@ -1,0 +1,94 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = null;
+    var selection = Umbraco.ContentAtRoot().FirstOrDefault()?.Children().Where(x => x.IsVisible()).ToList() ?? new List<IPublishedContent>();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            position: relative; /* Allow absolute positioning of child elements */
+        }
+        .nav-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            width: 100%;
+        }
+        .nav-item {
+            flex: 1;
+            height: 100vh;
+            display: flex;
+        }
+        .nav-link {
+            color: #333;
+            background-color: #f0f0f0;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            text-decoration: none;
+        }
+        /* Optional: different colors for each half */
+        .nav-item:first-child .nav-link {
+            background-color: #e8e8e8;
+        }
+        .nav-item:last-child .nav-link {
+            background-color: #4E87B7;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #2AEBBA; /* Bootstrap primary color */
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #24C99F; /* Darker shade on hover */
+        }
+        /* Position the button at the top right */
+        .backoffice-button {
+            position: absolute; /* Position relative to the nearest positioned ancestor */
+            top: 10px; /* Distance from the top */
+            right: 10px; /* Distance from the right */
+            z-index: 1000; /* Ensure it appears above other content */
+        }
+    </style>
+</head>
+<body>
+    <!-- Backoffice Button -->
+    <a href="@Url.Content("~/umbraco")" class="btn backoffice-button" target="_blank">
+        Go to Backoffice
+    </a>
+
+    <ul class="nav-list">
+        @if (selection.Any())
+        {
+            foreach (var item in selection)
+            {
+                <li class="nav-item">
+                    <a href="@item.Url()" class="nav-link @(Model.Id == item.Id ? "active" : "")" aria-label="@item.Name()">
+                        @item.Name()
+                    </a>
+                </li>
+            }
+        }
+        else
+        {
+            <li class="nav-item">
+                <span class="nav-link">No items available</span>
+            </li>
+        }
+    </ul>
+</body>
+</html>

@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace UmbracoBridge.Services;
+﻿namespace UmbracoBridge.Services;
 
 public interface IUmbracoManagementService
 {
-    Task<string?> Create(CreateDocumentTypeRequestModel value);
-    Task Delete(string id);
+    Task<object?> GetContent();
+    Task<object?> GetContent(string id);
     Task<object?> GetHealthChecks();
-
+    Task<object?> IsOk(bool isOk);
 }

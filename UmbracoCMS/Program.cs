@@ -4,6 +4,7 @@ builder.CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()
     .AddDeliveryApi()
+    .ConfigureDeliveryApi(builder.Configuration)
     .AddComposers()
     .Build();
 
