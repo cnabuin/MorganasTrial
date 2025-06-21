@@ -14,7 +14,7 @@ builder.Services.ConfigureHttpClientDefaults(http =>
     http.AddServiceDiscovery();
 });
 
-var baseAddress = Environment.GetEnvironmentVariable("API_BASE_ADDRESS");
+var baseAddress = Environment.GetEnvironmentVariable("UMBRACO_BASE_ADDRESS");
 
 builder.Services.AddHttpClient<IAuthService, AuthService>(client =>
 {

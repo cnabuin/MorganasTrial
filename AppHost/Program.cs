@@ -5,11 +5,10 @@ string deliveryApiKey = "myApiKey";
 
 IResourceBuilder<ProjectResource> cms = builder.AddProject<Projects.UmbracoCMS>(umbracoName)
     .WithEnvironment("UMBRACO_DELIVERY_API_KEY", deliveryApiKey)
-    .WithHttpEndpoint()
-    .WithHttpsEndpoint();
+    .WithHttpsEndpoint(port: 5001);
 
 builder.AddProject<Projects.UmbracoBridge>("umbracobridge")
-    .WithEnvironment("API_BASE_ADDRESS", $"https://{umbracoName}")
+    .WithEnvironment("UMBRACO_BASE_ADDRESS", $"https://{umbracoName}")
     .WithEnvironment("UMBRACO_DELIVERY_API_KEY", deliveryApiKey)
     .WithReference(cms)
     .WaitFor(cms);
