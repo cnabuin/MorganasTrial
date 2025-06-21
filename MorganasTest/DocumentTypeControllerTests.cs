@@ -4,25 +4,27 @@ using UmbracoBridge.Services;
 
 namespace UmbracoBridge.Controllers;
 
-public class DocumentTypeControllerTests
+public class UmbracoManagementControllerTests
 {
-    private readonly Mock<IDocumentTypeService> _mockDocumentTypeService;
-    private readonly DocumentTypeController _target;
+    private readonly Mock<IUmbracoManagementService> _umbracoManagementServiceMock;
+    private readonly Mock<IDocumentTypeService> _documentTypeServiceMock;
+    private readonly UmbracoManagementController _target;
 
-    public DocumentTypeControllerTests()
+    public UmbracoManagementControllerTests()
     {
-        _mockDocumentTypeService = new Mock<IDocumentTypeService>();
-        _target = new DocumentTypeController(_mockDocumentTypeService.Object);
+        _umbracoManagementServiceMock = new Mock<IUmbracoManagementService>();
+        _documentTypeServiceMock = new Mock<IDocumentTypeService>();
+        _target = new UmbracoManagementController(_umbracoManagementServiceMock.Object, _documentTypeServiceMock.Object);
     }
 
     [Fact]
     public async Task Post_ShouldReturnOk_WhenServiceCompletesSuccessfully()
     {
         // Arrange
-        CreateDocumentTypeRequestModel requestModel = new ();
+        CreateDocumentTypeRequestModel requestModel = new();
         string expectedResponse = Guid.NewGuid().ToString();
 
-        _mockDocumentTypeService.Setup(service => service.Create(requestModel))
+        _documentTypeServiceMock.Setup(service => service.Create(requestModel))
             .ReturnsAsync(expectedResponse);
 
         // Act
@@ -38,9 +40,9 @@ public class DocumentTypeControllerTests
     public async Task Post_ShouldReturnApiExceptionStatusCodeAndDetails_WhenServiceThrowsApiException()
     {
         // Arrange
-        CreateDocumentTypeRequestModel requestModel = new ();
-        ApiException apiException = new (400, new ProblemDetails());
-        _mockDocumentTypeService.Setup(service => service.Create(requestModel))
+        CreateDocumentTypeRequestModel requestModel = new();
+        ApiException apiException = new(400, new ProblemDetails());
+        _documentTypeServiceMock.Setup(service => service.Create(requestModel))
             .ThrowsAsync(apiException);
 
         // Act
@@ -58,7 +60,7 @@ public class DocumentTypeControllerTests
         // Arrange
         CreateDocumentTypeRequestModel requestModel = new();
         ApiException apiException = new ApiException(400, null);
-        _mockDocumentTypeService.Setup(service => service.Create(requestModel))
+        _documentTypeServiceMock.Setup(service => service.Create(requestModel))
             .ThrowsAsync(apiException);
 
         // Act
@@ -75,7 +77,7 @@ public class DocumentTypeControllerTests
     {
         // Arrange
         string documentTypeId = "123";
-        _mockDocumentTypeService.Setup(service => service.Delete(documentTypeId))
+        _documentTypeServiceMock.Setup(service => service.Delete(documentTypeId))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -92,7 +94,7 @@ public class DocumentTypeControllerTests
         // Arrange
         string documentTypeId = "123";
         ApiException apiException = new ApiException(404, new ProblemDetails());
-        _mockDocumentTypeService.Setup(service => service.Delete(documentTypeId))
+        _documentTypeServiceMock.Setup(service => service.Delete(documentTypeId))
             .ThrowsAsync(apiException);
 
         // Act
@@ -110,7 +112,7 @@ public class DocumentTypeControllerTests
         // Arrange
         string documentTypeId = "123";
         ApiException apiException = new ApiException(404, null);
-        _mockDocumentTypeService.Setup(service => service.Delete(documentTypeId))
+        _documentTypeServiceMock.Setup(service => service.Delete(documentTypeId))
             .ThrowsAsync(apiException);
 
         // Act

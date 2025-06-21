@@ -16,14 +16,14 @@ public class DocumentTypeService : IDocumentTypeService
         _authService = authService;
     }
 
-    public async Task<string?> Create(CreateDocumentTypeRequestModel value)
+    public async Task<string?> Create(CreateDocumentTypeRequestModel requestModel)
     {
         string url = $"{_client.BaseAddress}umbraco/management/api/v1/document-type";
 
         string token = await _authService.GetAuthToken();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        StringContent content = new(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+        StringContent content = new(JsonSerializer.Serialize(requestModel), Encoding.UTF8, "application/json");
 
         HttpResponseMessage response = await _client.PostAsync(url, content);
         string responseContent = await response.Content.ReadAsStringAsync();

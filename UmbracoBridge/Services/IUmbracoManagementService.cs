@@ -1,6 +1,6 @@
 ﻿namespace UmbracoBridge.Services;
 
-public interface IUmbracoService
+public interface IUmbracoManagementService
 {
     Task<object?> GetContent();
     Task<object?> GetContent(string id);

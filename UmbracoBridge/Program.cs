@@ -21,7 +21,7 @@ builder.Services.AddHttpClient<IAuthService, AuthService>(client =>
     client.BaseAddress = new Uri(baseAddress);
 });
 
-builder.Services.AddHttpClient<IUmbracoService, HealthcheckService>(client =>
+builder.Services.AddHttpClient<IUmbracoManagementService, UmbracoManagementService>(client =>
 {
     client.BaseAddress = new Uri(baseAddress);
 });
